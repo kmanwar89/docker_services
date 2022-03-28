@@ -1,0 +1,33 @@
+version: "3.1"
+
+services:
+  adguard:
+    container_name: adguard_home
+    image: adguard/adguardhome:latest
+    restart: unless-stopped
+    volumes:
+      - ./data:/opt/adguardhome/work
+      - ./config:/opt/adguardhome/conf
+    ports:
+      # DNS
+      - 53:53/tcp
+      - 53:53/udp
+      # what protocol for 784?
+      - 784:784/udp
+      # DHCP
+      #- 67:67/tcp
+      #- 68:68/tcp
+      #- 68:68/udp
+      # Admin Web Interface
+      - 3000:3000/tcp
+    # Below for HTTPS/DNS-over-HTTPS
+      - 80:80/tcp
+      - 443:443/tcp
+      #- 853:853/tcp # for DNS-over-TLS
+      #- 5443:5443/tcp
+      #- 5443:5443/udp
+    networks:
+       - adguard
+networks:
+  adguard:
+    driver: bridge
